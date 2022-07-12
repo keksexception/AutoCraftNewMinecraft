@@ -63,6 +63,7 @@ public class JSONConverter {
 	public static JSONObject toJson(Inventory inv, String name) {
 		JSONObject inf = new JSONObject();
 		inf.put("size", inv.getSize());
+		inf.put("name",name);
 		for(int i = 0; i < inv.getSize(); i++) {
 			if(inv.getItem(i)!=null)
 			inf.put("slot"+i, toJson(inv.getItem(i)));

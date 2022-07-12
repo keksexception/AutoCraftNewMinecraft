@@ -36,12 +36,12 @@ public class InventoryTitles {
 					.build());
 		}
 		if(page!=0)
-			recipes.setItem(9*3, new ItemBuilder(Material.PAPER).setName("§e<<").build());
+			recipes.setItem(9*3, new ItemBuilder(Material.PAPER).setName("§e<<").setLore(Messages.PAGE+" " +page).build());
 		
 		recipes.setItem(9*4-5, crafter.getTarget().getTarget());
 		
 		if(RecipeRegistry.getRecipes().size()>(page+1)*9*3)
-			recipes.setItem(9*4-1, new ItemBuilder(Material.PAPER).setName("§e>>").build());
+			recipes.setItem(9*4-1, new ItemBuilder(Material.PAPER).setName("§e>>").setLore(Messages.PAGE+" " + (page+2)).build());
 		
 		
 		return recipes;

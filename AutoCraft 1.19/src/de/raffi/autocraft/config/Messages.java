@@ -14,6 +14,9 @@ public class Messages {
 	@Config("message.nopermission")
 	public static  String NO_PERMISSION = "§cNo permission";
 	
+	@Config("message.page")
+	public static  String PAGE = "§7Seite§e";
+	
 	@Config("block.place")
 	public static  String BLOCK_PLACED = "§aPlaced %block%";
 	@Config("block.remove")
