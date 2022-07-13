@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.raffi.autocraft.config.Messages;
+import de.raffi.autocraft.main.AutoCraft;
 
 public class CommandAutoCraft implements CommandExecutor {
 
@@ -25,7 +26,10 @@ public class CommandAutoCraft implements CommandExecutor {
 					Messages.loadMessages();
 					p.sendMessage(Messages.PREFIX + " §aReloading complete");
 					break;
-
+				case "get":
+					p.getInventory().addItem(AutoCraft.getAutoCraft().getAutoCrafter());
+					p.sendMessage(Messages.PREFIX + " §aYou received autocrafting block");
+					break;
 				default:
 					showHelp(p);
 					break;
@@ -41,8 +45,9 @@ public class CommandAutoCraft implements CommandExecutor {
 		return false;
 	}
 	private void showHelp(Player p) {
-		p.sendMessage(Messages.PREFIX + " §7/autocraft help §eshow help");
 		p.sendMessage(Messages.PREFIX + " §7/autocraft reload §ereload all messages");
+		p.sendMessage(Messages.PREFIX + " §7/autocraft get §ereceive autocrafter");
+		p.sendMessage(Messages.PREFIX + " §7/autocraft help §eshow help");
 	}
 
 }

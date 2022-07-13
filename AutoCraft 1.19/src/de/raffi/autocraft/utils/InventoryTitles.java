@@ -35,6 +35,9 @@ public class InventoryTitles {
 					.setLore(lore)
 					.build());
 		}
+		
+		recipes.setItem(9*4-3, new ItemBuilder(Material.LEGACY_SIGN).setName("§dSearch").setLore("§7Comming soon").build());
+		
 		if(page!=0)
 			recipes.setItem(9*3, new ItemBuilder(Material.PAPER).setName("§e<<").setLore(Messages.PAGE+" " +page).build());
 		

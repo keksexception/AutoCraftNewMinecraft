@@ -1,5 +1,6 @@
 package de.raffi.autocraft.listener;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -16,7 +17,9 @@ import de.raffi.autocraft.blocks.BasicBlock;
 import de.raffi.autocraft.blocks.BlockAutoCrafter;
 import de.raffi.autocraft.blocks.ConnectableBlock;
 import de.raffi.autocraft.blocks.Interactable;
+import de.raffi.autocraft.builder.ItemBuilder;
 import de.raffi.autocraft.config.Messages;
+import de.raffi.autocraft.main.AutoCraft;
 import de.raffi.autocraft.recipes.Recipe;
 import de.raffi.autocraft.recipes.RecipeRegistry;
 import de.raffi.autocraft.utils.BlockManager;
@@ -59,7 +62,6 @@ public class InteractionListener implements Listener {
 			break;
 		case LEGACY_WORKBENCH: case CRAFTING_TABLE:
 			if(e.getItemInHand().getItemMeta().getDisplayName()==null)return;
-			System.out.println(e.getItemInHand().getItemMeta().getDisplayName());
 			if(!e.getItemInHand().getItemMeta().getDisplayName().equals("§eAutoCrafter§5")) return;
 			BlockAutoCrafter crafter = new BlockAutoCrafter(Material.LEGACY_WORKBENCH, 0, e.getBlockPlaced().getLocation(), null, RecipeRegistry.getRecipes().get(0));
 			BlockManager.registerBlock(crafter);
@@ -81,6 +83,11 @@ public class InteractionListener implements Listener {
 			
 			BlockManager.unregisterBlock(b);
 			e.getPlayer().sendMessage(Messages.PREFIX+" " +Messages.BLOCK_REMOVED.replace("%block%", "AutoCrafter"));
+			
+			if(e.getPlayer().getGameMode()==GameMode.CREATIVE) return;
+			e.setCancelled(true);
+			e.getBlock().setType(Material.AIR);
+			e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), AutoCraft.getAutoCraft().getAutoCrafter());
 			break;
 			
 		case HOPPER:
@@ -138,6 +145,8 @@ public class InteractionListener implements Listener {
 				} else if(e.getCurrentItem().getItemMeta().getDisplayName().equals("§e>>")) {
 					p.openInventory(InventoryTitles.getRecipes(p,page+1));
 					InventoryTitles.setPage(p, page+1);
+					return;
+				} else if(e.getCurrentItem().getItemMeta().getDisplayName().equals("§dSearch")) {
 					return;
 				}
 			}

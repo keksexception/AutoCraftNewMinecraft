@@ -101,6 +101,7 @@ public class BlockManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("[AutoCraft] Unable to read blocks");
+			System.out.println("[AutoCraft] If this error persists, stop the server and delete blockdata.json");
 		}
 		
 	}
