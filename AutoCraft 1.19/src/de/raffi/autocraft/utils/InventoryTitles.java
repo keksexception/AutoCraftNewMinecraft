@@ -31,7 +31,7 @@ public class InventoryTitles {
 					lore[j] = "§7" + r.getIngrediants()[j].getAmount() + "x " + type.name().toLowerCase().replace("_", " ");
 			}
 			recipes.setItem(i-page*9*3,new ItemBuilder(r.getTarget().clone())
-					.glow(crafter.getTarget().getTarget().getType()==r.getTarget().getType())
+					.glow(crafter.getTarget().getTarget().getType()==r.getTarget().getType()&&crafter.getTarget().getTarget().equals(r.getTarget()))
 					.setLore(lore)
 					.build());
 		}

@@ -1,5 +1,5 @@
 name: AutoCraft
-version: BETA-4
+version: BETA-5
 authors: [keksexception]
 main: de.raffi.autocraft.main.AutoCraft
 api-version: 1.14

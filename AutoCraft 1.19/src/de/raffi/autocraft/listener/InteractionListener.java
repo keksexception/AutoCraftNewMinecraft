@@ -12,12 +12,12 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import de.raffi.autocraft.blocks.BasicBlock;
 import de.raffi.autocraft.blocks.BlockAutoCrafter;
 import de.raffi.autocraft.blocks.ConnectableBlock;
 import de.raffi.autocraft.blocks.Interactable;
-import de.raffi.autocraft.builder.ItemBuilder;
 import de.raffi.autocraft.config.Messages;
 import de.raffi.autocraft.main.AutoCraft;
 import de.raffi.autocraft.recipes.Recipe;
@@ -151,14 +151,11 @@ public class InteractionListener implements Listener {
 				}
 			}
 		
+			int clickedSlot = e.getSlot();
+			int get = clickedSlot+page*9*3;
+			((BlockAutoCrafter) PlayerInteractionStorage.getCurrentBlock(p)).setTarget(RecipeRegistry.getRecipes().get(get));
+			p.openInventory(InventoryTitles.getRecipes(p,page));
 			
-			for(Recipe r : RecipeRegistry.getRecipes()) {
-				if(r.getTarget().getType()==e.getCurrentItem().getType()) {
-					((BlockAutoCrafter) PlayerInteractionStorage.getCurrentBlock(p)).setTarget(r);
-					p.openInventory(InventoryTitles.getRecipes(p,page));
-					break;
-				}
-			}
 		}
 		
 	}
