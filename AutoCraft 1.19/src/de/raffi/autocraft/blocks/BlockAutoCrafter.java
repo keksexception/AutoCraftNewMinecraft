@@ -22,7 +22,7 @@ import de.raffi.autocraft.recipes.Recipe;
 import de.raffi.autocraft.utils.JSONConverter;
 import de.raffi.autocraft.utils.PlayerInteractionStorage;
 
-public class BlockAutoCrafter extends ConnectableBlock implements Interactable{
+public class BlockAutoCrafter extends QueueableConnectedBlock implements Interactable{
 	
 	private Recipe target;
 	
@@ -100,28 +100,7 @@ public class BlockAutoCrafter extends ConnectableBlock implements Interactable{
 		}
 		return null;
 	}
-	private void removeFromInv(Inventory from, Material m, int amount) { 
-		int removed = 0;
-		for(int i = 0; i < from.getSize();i++) {
-			ItemStack itemAt = from.getItem(i);
-			if(itemAt==null) continue;
-			if(itemAt.getType()!=m) continue;
-			
-			int itemAmount = itemAt.getAmount();
-			
-			if(itemAmount>=amount-removed) {
-				itemAt.setAmount(itemAmount-amount+removed);
-				
-				if(itemAmount-amount+removed==0)
-					from.setItem(i, null);
-				break;
-			} else {
-				removed+=itemAt.getAmount();
-				from.setItem(i, null);
-			}
-			if(removed == amount) break;
-		}
-	}
+
 	public boolean canCraftTarget() {
 		boolean canCraft = false;
 		

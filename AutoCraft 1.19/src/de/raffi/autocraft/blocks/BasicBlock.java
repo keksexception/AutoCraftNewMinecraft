@@ -46,6 +46,28 @@ public abstract class BasicBlock {
 	public void addItemToInventory(ItemStack item) {
 		getInventory().addItem(item);
 	}
+	public void removeFromInv(Inventory from, Material m, int amount) { 
+		int removed = 0;
+		for(int i = 0; i < from.getSize();i++) {
+			ItemStack itemAt = from.getItem(i);
+			if(itemAt==null) continue;
+			if(itemAt.getType()!=m) continue;
+			
+			int itemAmount = itemAt.getAmount();
+			
+			if(itemAmount>=amount-removed) {
+				itemAt.setAmount(itemAmount-amount+removed);
+				
+				if(itemAmount-amount+removed==0)
+					from.setItem(i, null);
+				break;
+			} else {
+				removed+=itemAt.getAmount();
+				from.setItem(i, null);
+			}
+			if(removed == amount) break;
+		}
+	}
 	public World getWorld() {
 		return getLocation().getWorld();
 	}

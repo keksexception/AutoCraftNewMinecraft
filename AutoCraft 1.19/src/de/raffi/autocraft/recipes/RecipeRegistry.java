@@ -1,5 +1,8 @@
 package de.raffi.autocraft.recipes;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,6 +10,9 @@ import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -18,9 +24,35 @@ public class RecipeRegistry {
 	private static List<Recipe> recipes;
 	
 	public static void add(Recipe r) {
+		if(!isAllowed(r.getTarget().getType())) return;
 		recipes.add(r);
 	}
-	public static void init() {
+	public static File configFile = new File("plugins/AutoCraft/recipes.yml");
+	public static FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+	private static boolean isAllowed(Material m) {
+		if( config.isSet("allow." + m.name())) {
+			return config.getBoolean("allow." + m.name());
+		} 
+		config.set("allow." + m.name(), true);
+		return true;
+	}
+		public static void init() {
+		try {
+			if(!configFile.getParentFile().exists())
+				configFile.getParentFile().mkdir();
+			if(!configFile.exists())
+				configFile.createNewFile();
+			config.load(configFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		recipes = new ArrayList<>();
 		System.out.println("[AutoCraft] Registering recipes ...");
 		
@@ -29,10 +61,8 @@ public class RecipeRegistry {
 				ShapelessRecipe shapeless = (ShapelessRecipe) rec;
 				if(shapeless.getResult().getAmount()!=0&&!containsAir(shapeless.getIngredientList())) {
 					add(new Recipe(shapeless.getResult(), summarize(shapeless.getIngredientList()).toArray(ItemStack[]::new)));
-					
 				}
 			
-				
 					
 			} else if(rec instanceof ShapedRecipe) {
 				ShapedRecipe shaped = (ShapedRecipe) rec;
@@ -43,6 +73,12 @@ public class RecipeRegistry {
 			}
 		});
 		System.out.println("[AutoCraft] Registering recipes completed");
+		try {
+			config.save(configFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	private static boolean containsAir(Collection<ItemStack> stack) {
 		for(ItemStack s : stack) {
@@ -110,5 +146,18 @@ public class RecipeRegistry {
 			break;
 		}
 		return "Unknown";
+	}
+	public static List<Recipe> filter(String filter) {
+		if(filter == null) return recipes;
+		List<Recipe> available = new ArrayList<>();
+		for(Recipe r : RecipeRegistry.getRecipes()) {
+			boolean add = false;
+			if(r.getTarget().getType().name().toLowerCase().contains(filter.toLowerCase())) add = true;
+			if(r.getTarget().getItemMeta().getDisplayName()!=null&&r.getTarget().getItemMeta().getDisplayName().toLowerCase().contains(filter.toLowerCase())) add = true;
+			if(add)
+				available.add(r);
+			
+		}
+		return available;
 	}
 }
