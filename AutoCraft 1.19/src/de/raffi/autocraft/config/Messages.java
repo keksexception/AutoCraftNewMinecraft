@@ -56,7 +56,7 @@ public class Messages {
 	public static  String INVENTORY_TITLE_SELECTOPTION = "§dSelect";
 	
 	@Config("setting.block.blockconverter.probability")
-	public static  int DIAMOND_PROBABILITY = 5;
+	public static int DIAMOND_PROBABILITY = 5;
 	
 	@Config("crafting.allow.autocrafter")
 	public static  boolean ALLOW_CRAFT_AUTOCRAFT=true;
@@ -82,12 +82,19 @@ public class Messages {
 				if(config.isSet(annotation.value())) {
 					if(f.getType().equals(String.class))
 						f.set(null, config.getString(annotation.value()).replace("&", "§"));
-					else if(f.getType().equals(Integer.class) || f.getType().equals(int.class))
+					else if(f.getType().equals(Integer.class) || f.getType().equals(int.class)) 
 						f.set(null, config.getInt(annotation.value()));
 					else if(f.getType().equals(Boolean.class)|| f.getType().equals(boolean.class)) 
 						f.set(null, config.getBoolean(annotation.value()));
-				} else
-					config.set(annotation.value(), String.valueOf(f.get(null)).replace("§", "&"));
+				} else {
+					if(f.getType().equals(String.class))
+						config.set(annotation.value(), String.valueOf(f.get(null)).replace("§", "&"));
+					else if(f.getType().equals(Integer.class) || f.getType().equals(int.class))
+						config.set(annotation.value(), f.getInt(null));
+					else if(f.getType().equals(Boolean.class)|| f.getType().equals(boolean.class)) 
+						config.set(annotation.value(), f.getBoolean(null));
+				}
+				
 			}
 			config.save(configFile);
 		} catch (Exception e) {

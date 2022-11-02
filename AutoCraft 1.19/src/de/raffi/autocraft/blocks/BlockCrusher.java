@@ -39,9 +39,10 @@ public class BlockCrusher extends QueueableConnectedBlock implements Interactabl
 	public void addItemToInventory(ItemStack item) {
 		boolean recipeFound = false;
 		for(Recipe r : RecipeRegistry.getRecipes()) {
-			if(!r.getTarget().equals(item)) continue;
+			if(!r.getTarget().isSimilar(item)) continue;
 			for(ItemStack ingrediant : r.getIngrediants()) {
-				getQueueInventory().addItem(new ItemBuilder(ingrediant).setDurability(0).build());
+				for(int i = 0; i < item.getAmount(); i++)
+					getQueueInventory().addItem(new ItemBuilder(ingrediant).setDurability(0).build());
 			}
 			recipeFound = true;
 			break;

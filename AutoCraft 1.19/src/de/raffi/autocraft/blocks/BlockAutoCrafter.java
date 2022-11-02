@@ -116,6 +116,23 @@ public class BlockAutoCrafter extends QueueableConnectedBlock implements Interac
 		
 		return canCraft;
 	}
+	private boolean contains(Material type, int amount) {
+		for(int i = 0; i < getInventory().getSize(); i++) {
+			ItemStack stack = getInventory().getContents()[i];
+			System.out.println(stack.getType());
+			if(stack == null) continue;
+			if(stack.getType() == type) {
+				int counter = 0;
+				for(int j = 0; j < getInventory().getSize(); j++) {
+					ItemStack count = getInventory().getContents()[j];
+					if(stack.getType()!=type) continue;
+					counter+=count.getAmount();
+				}
+				if(counter>=amount) return true;
+			}
+		}
+		return false;
+	}
 
 	public Recipe getTarget() {
 		return target;

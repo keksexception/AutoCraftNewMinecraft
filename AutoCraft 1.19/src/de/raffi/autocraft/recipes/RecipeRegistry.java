@@ -72,6 +72,7 @@ public class RecipeRegistry {
 
 			}
 		});
+		addIncomatible();
 		System.out.println("[AutoCraft] Registering recipes completed");
 		try {
 			config.save(configFile);
@@ -79,6 +80,14 @@ public class RecipeRegistry {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public static void addIncomatible() {
+		System.out.println("[AutoCraft] Adding custom recipes ...");
+		recipes.add(new Recipe(new ItemBuilder(Material.STICK).setAmount(4).build(), new ItemBuilder(Material.SPRUCE_PLANKS).setAmount(2).build()));
+		recipes.add(new Recipe(new ItemBuilder(Material.STICK).setAmount(4).build(), new ItemBuilder(Material.BIRCH_PLANKS).setAmount(2).build()));
+		recipes.add(new Recipe(new ItemBuilder(Material.STICK).setAmount(4).build(), new ItemBuilder(Material.DARK_OAK_PLANKS).setAmount(2).build()));
+		recipes.add(new Recipe(new ItemBuilder(Material.STICK).setAmount(4).build(), new ItemBuilder(Material.ACACIA_PLANKS).setAmount(2).build()));
+		recipes.add(new Recipe(new ItemBuilder(Material.STICK).setAmount(4).build(), new ItemBuilder(Material.JUNGLE_PLANKS).setAmount(2).build()));
 	}
 	private static boolean containsAir(Collection<ItemStack> stack) {
 		for(ItemStack s : stack) {
