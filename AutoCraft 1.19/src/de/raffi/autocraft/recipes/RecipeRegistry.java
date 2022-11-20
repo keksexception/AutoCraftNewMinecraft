@@ -18,6 +18,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import de.raffi.autocraft.builder.ItemBuilder;
+import de.raffi.autocraft.config.Messages;
+import de.raffi.autocraft.main.AutoCraft;
 
 public class RecipeRegistry {
 	
@@ -37,49 +39,53 @@ public class RecipeRegistry {
 		return true;
 	}
 		public static void init() {
-		try {
-			if(!configFile.getParentFile().exists())
-				configFile.getParentFile().mkdir();
-			if(!configFile.exists())
-				configFile.createNewFile();
-			config.load(configFile);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		recipes = new ArrayList<>();
-		System.out.println("[AutoCraft] Registering recipes ...");
-		
-		Bukkit.getServer().recipeIterator().forEachRemaining(rec->{
-			if(rec instanceof ShapelessRecipe) {
-				ShapelessRecipe shapeless = (ShapelessRecipe) rec;
-				if(shapeless.getResult().getAmount()!=0&&!containsAir(shapeless.getIngredientList())) {
-					add(new Recipe(shapeless.getResult(), summarize(shapeless.getIngredientList()).toArray(ItemStack[]::new)));
-				}
 			
-					
-			} else if(rec instanceof ShapedRecipe) {
-				ShapedRecipe shaped = (ShapedRecipe) rec;
-				if(shaped.getResult().getAmount()!=0 && !containsAir(shaped.getIngredientMap().values())) {
-					add(new Recipe(shaped.getResult(), summarize(shaped.getIngredientMap().values().stream().toList()).toArray(ItemStack[]::new)));
+			Bukkit.getScheduler().scheduleSyncDelayedTask(AutoCraft.getAutoCraft(), ()->{
+				try {
+					if(!configFile.getParentFile().exists())
+						configFile.getParentFile().mkdir();
+					if(!configFile.exists())
+						configFile.createNewFile();
+					config.load(configFile);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidConfigurationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+				recipes = new ArrayList<>();
+				System.out.println("[AutoCraft] Registering recipes ...");
+				
+				Bukkit.getServer().recipeIterator().forEachRemaining(rec->{
+					if(rec instanceof ShapelessRecipe) {
+						ShapelessRecipe shapeless = (ShapelessRecipe) rec;
+						if(shapeless.getResult().getAmount()!=0&&!containsAir(shapeless.getIngredientList())) {
+							add(new Recipe(shapeless.getResult(), summarize(shapeless.getIngredientList()).toArray(ItemStack[]::new)));
+						}
+					
+							
+					} else if(rec instanceof ShapedRecipe) {
+						ShapedRecipe shaped = (ShapedRecipe) rec;
+						if(shaped.getResult().getAmount()!=0 && !containsAir(shaped.getIngredientMap().values())) {
+							add(new Recipe(shaped.getResult(), summarize(shaped.getIngredientMap().values().stream().toList()).toArray(ItemStack[]::new)));
+						}
 
-			}
-		});
-		addIncomatible();
-		System.out.println("[AutoCraft] Registering recipes completed");
-		try {
-			config.save(configFile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+					}
+				});
+				addIncomatible();
+				System.out.println("[AutoCraft] Registering recipes completed");
+				try {
+					config.save(configFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			},Messages.RECIPEREGISTRY_DELAY);
+
 	}
 	public static void addIncomatible() {
 		System.out.println("[AutoCraft] Adding custom recipes ...");

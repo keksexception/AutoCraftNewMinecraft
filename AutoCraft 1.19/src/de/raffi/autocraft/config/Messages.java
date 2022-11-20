@@ -18,6 +18,9 @@ public class Messages {
 	@Config("message.page")
 	public static  String PAGE = "§7Page§e";
 	
+	@Config("reciperegistry.delay")
+	public static int RECIPEREGISTRY_DELAY = 0;
+	
 	@Config("block.place")
 	public static  String BLOCK_PLACED = "§aPlaced %block%";
 	@Config("block.remove")
@@ -67,7 +70,7 @@ public class Messages {
 	@Config("crafting.allow.blockcrusher")
 	public static  boolean ALLOW_CRAFT_BLOCKCRUSHER=true;
 	
-	
+
 	
 	
 	private static File configFile = new File("plugins/AutoCraft/messages.yml");
