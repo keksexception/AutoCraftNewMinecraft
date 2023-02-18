@@ -49,6 +49,9 @@ public class BlockOreAnalysizer extends QueueableConnectedBlock{
 	}
 	@Override
 	public void update() {		
+		if(getInventory().firstEmpty()==-1) {
+			return;
+		}
 		try {
 			for(Block connected : getConnected()) {
 				if(connected.getType()!=Material.HOPPER) continue;

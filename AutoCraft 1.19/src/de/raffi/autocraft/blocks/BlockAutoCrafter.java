@@ -6,16 +6,13 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.EulerAngle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import de.raffi.autocraft.builder.ItemBuilder;
-import de.raffi.autocraft.builder.SkullBuilder;
 import de.raffi.autocraft.config.Messages;
 import de.raffi.autocraft.converter.ConverterLocation;
 import de.raffi.autocraft.recipes.Recipe;
@@ -54,15 +51,7 @@ public class BlockAutoCrafter extends QueueableConnectedBlock implements Interac
 	@Override
 	public BasicBlock create() {
 		
-		stand = getWorld().spawn(getLocation().clone().add(0.5, 0.3, 0.5), ArmorStand.class);
-		stand.setVisible(false);
-		stand.setArms(true);
-		stand.setGravity(false);
-		stand.setSmall(true);
-		stand.setHelmet(new SkullBuilder("QuinnSect").build());
-		
 		queueInventory = Bukkit.createInventory(null, 9*5);
-		PlayerInteractionStorage.armorstands.add(stand.getUniqueId());
 		
 		try {
 			getLocation().getWorld().playSound(getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
@@ -138,13 +127,13 @@ public class BlockAutoCrafter extends QueueableConnectedBlock implements Interac
 		return target;
 	}
 	
-	private ArmorStand stand;
-	private double sinus=0;
 	
 	@Override
 	public void update() {
-		stand.setHeadPose(new EulerAngle(0, sinus, 0));
-		sinus+=Math.PI/10;
+		
+		if(getInventory().firstEmpty()==-1) {
+			return;
+		}
 		
 		try {
 			for(Block connected : getConnected()) {
@@ -185,8 +174,6 @@ public class BlockAutoCrafter extends QueueableConnectedBlock implements Interac
 	@Override
 	public void remove(boolean b) {
 		super.remove(b);
-		stand.remove();
-		PlayerInteractionStorage.armorstands.remove(stand.getUniqueId());
 	}
 	public Inventory getQueueInventory() {
 		return queueInventory;

@@ -73,6 +73,9 @@ public class BlockAutoEnchanter extends QueueableConnectedBlock implements Inter
 	}
 	@Override
 	public void update() {
+		if(getInventory().firstEmpty()==-1) {
+			return;
+		}
 		try {
 			for(Block connected : getConnected()) {
 				if(connected.getType()!=Material.HOPPER) continue;

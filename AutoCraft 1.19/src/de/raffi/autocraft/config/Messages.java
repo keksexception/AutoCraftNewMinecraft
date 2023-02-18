@@ -30,6 +30,13 @@ public class Messages {
 	@Config("block.hopperdisconnected")
 	public static  String BLOCK_HOPPER_DISCONNECTED = "§cDisconnected hopper";
 	
+	@Config("item.resetsearch.name")
+	public static  String ITEM_RESETSEARCH_NAME = "§dReset search";
+	@Config("item.search.name")
+	public static  String ITEM_SEARCH_NAME = "§dSearch";
+	@Config("item.search.lore")
+	public static  String ITEM_SEARCH_LORE = "§d%amount% §7results.";
+	
 	@Config("item.recipes.name")
 	public static  String ITEM_RECIPES_NAME = "§aRecipes";
 	@Config("item.recipes.lore")

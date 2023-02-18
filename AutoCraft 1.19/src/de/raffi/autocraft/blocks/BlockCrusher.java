@@ -41,7 +41,7 @@ public class BlockCrusher extends QueueableConnectedBlock implements Interactabl
 		for(Recipe r : RecipeRegistry.getRecipes()) {
 			if(!r.getTarget().isSimilar(item)) continue;
 			for(ItemStack ingrediant : r.getIngrediants()) {
-				for(int i = 0; i < item.getAmount(); i++)
+				for(int i = 0; i < item.getAmount()-(r.getTarget().getAmount()-1); i++)
 					getQueueInventory().addItem(new ItemBuilder(ingrediant).setDurability(0).build());
 			}
 			recipeFound = true;
@@ -53,6 +53,9 @@ public class BlockCrusher extends QueueableConnectedBlock implements Interactabl
 	
 	@Override
 	public void update() {
+		if(getInventory().firstEmpty()==-1) {
+			return;
+		}
 		try {
 			for(Block connected : getConnected()) {
 				if(connected.getType()!=Material.HOPPER) continue;
