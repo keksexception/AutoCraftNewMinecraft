@@ -25,6 +25,7 @@ public class AutoCraft extends JavaPlugin {
 	private ItemStack blockCrusher;
 	private ItemStack oreBlock;
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 		autoCraft = this;
@@ -55,28 +56,28 @@ public class AutoCraft extends JavaPlugin {
 			r.shape("AAA","ABA","AAA");
 			r.setIngredient('A', Material.CRAFTING_TABLE);
 			r.setIngredient('B', Material.REDSTONE_BLOCK);
-			Bukkit.getServer().addRecipe(r);
+			Bukkit.addRecipe(r);
 		}
 		if(Messages.ALLOW_CRAFT_AUTOENCHANT) {
 			ShapedRecipe r2 = new ShapedRecipe(new NamespacedKey(this, "AutoEnchanter"),autoEnchanter);
 			r2.shape("AAA","ABA","AAA");
 			r2.setIngredient('A', Material.OBSIDIAN);
 			r2.setIngredient('B', Material.ENCHANTING_TABLE);
-			Bukkit.getServer().addRecipe(r2);
+			Bukkit.addRecipe(r2);
 		}
 		if(Messages.ALLOW_CRAFT_OREBLOCK) {
 			ShapedRecipe r3 = new ShapedRecipe(new NamespacedKey(this, "OreAnalyzer"),oreBlock);
 			r3.shape("AAA","ABA","AAA");
 			r3.setIngredient('A', Material.DIAMOND_BLOCK);
 			r3.setIngredient('B', Material.REDSTONE_BLOCK);
-			Bukkit.getServer().addRecipe(r3);
+			Bukkit.addRecipe(r3);
 		}
 		if(Messages.ALLOW_CRAFT_BLOCKCRUSHER) {
 			ShapedRecipe r4 = new ShapedRecipe(new NamespacedKey(this, "BlockCrusher"),blockCrusher);
 			r4.shape("AAA","ABA","AAA");
 			r4.setIngredient('A', Material.ANVIL);
 			r4.setIngredient('B', Material.REDSTONE_BLOCK);
-			Bukkit.getServer().addRecipe(r4);
+			Bukkit.addRecipe(r4);
 		}
 		
 	
@@ -91,7 +92,13 @@ public class AutoCraft extends JavaPlugin {
 		BlockManager.readBlocks();
 		
 
-		
+		if(Messages.AUTO_SAVING_DELAY!=-1) {
+			Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, ()->{
+				//System.out.println("[AutoCraft] Autosaving blocks ...");
+				BlockManager.saveBlocks();
+			//	System.out.println("[AutoCraft] Autosaving blocks complete.");
+			}, Messages.AUTO_SAVING_DELAY, Messages.AUTO_SAVING_DELAY);
+		}
 		
 	}
 	public ItemStack getAutoCrafter() {

@@ -76,7 +76,8 @@ public class Messages {
 	public static  boolean ALLOW_CRAFT_OREBLOCK=true;
 	@Config("crafting.allow.blockcrusher")
 	public static  boolean ALLOW_CRAFT_BLOCKCRUSHER=true;
-	
+	@Config("autosaving.delay")
+	public static  int AUTO_SAVING_DELAY=-1;
 
 	
 	

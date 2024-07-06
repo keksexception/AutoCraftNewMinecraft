@@ -148,7 +148,7 @@ public class BlockAutoCrafter extends QueueableConnectedBlock implements Interac
 				}
 			}
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 	
 		

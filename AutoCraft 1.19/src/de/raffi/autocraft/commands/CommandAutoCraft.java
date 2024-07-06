@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import de.raffi.autocraft.config.Messages;
 import de.raffi.autocraft.main.AutoCraft;
 import de.raffi.autocraft.recipes.RecipeRegistry;
+import de.raffi.autocraft.utils.BlockManager;
 
 public class CommandAutoCraft implements CommandExecutor, TabCompleter{
 
@@ -34,6 +35,11 @@ public class CommandAutoCraft implements CommandExecutor, TabCompleter{
 					RecipeRegistry.getRecipes().clear();
 					RecipeRegistry.init();
 					p.sendMessage(Messages.PREFIX + " §aReloading complete");
+					break;
+				case "forcesave":
+					p.sendMessage(Messages.PREFIX + " §7Saving blocks ...");
+					BlockManager.saveBlocks();
+					p.sendMessage(Messages.PREFIX + " §aBlock saving complete");
 					break;
 				default:
 					showHelp(p);
@@ -79,13 +85,14 @@ public class CommandAutoCraft implements CommandExecutor, TabCompleter{
 	}
 	private void showHelp(Player p) {
 		p.sendMessage(Messages.PREFIX + " §7/autocraft reload §ereload all messages");
+		p.sendMessage(Messages.PREFIX + " §7/autocraft forcesave §eforce save all blocks");
 		p.sendMessage(Messages.PREFIX + " §7/autocraft get <autocrafter/autoenchanter/oreanalyzer/blockcrusher> §ereceive autocrafter");
 		p.sendMessage(Messages.PREFIX + " §7/autocraft help §eshow help");
 	}
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 		List<String> suggestions = new ArrayList<>();
-		String[] arg1Completions = new String[] {"get","help","reload"};
+		String[] arg1Completions = new String[] {"get","help","reload", "forcesave"};
 		if(args.length == 1) {
 			for(String check : arg1Completions) {
 				if(check.startsWith(args[0].toLowerCase())) 

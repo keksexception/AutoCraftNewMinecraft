@@ -54,7 +54,7 @@ public class BlockManager {
 	private static void runUpdateLoop() {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(AutoCraft.getAutoCraft(), ()->{
 			blocks.forEach(block->block.update());
-		}, 60, 5);
+		}, 60, 20);
 	}
 	private static File dataFile = new File("plugins/AutoCraft/blockdata.json");
 	@SuppressWarnings("unchecked")
@@ -83,7 +83,7 @@ public class BlockManager {
 	}
 	public static void readBlocks() {
 		if(!dataFile.exists()) return;
-		
+
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(dataFile));
 			String json = reader.readLine();
