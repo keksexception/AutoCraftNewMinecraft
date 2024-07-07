@@ -108,7 +108,6 @@ public class BlockAutoCrafter extends QueueableConnectedBlock implements Interac
 	private boolean contains(Material type, int amount) {
 		for(int i = 0; i < getInventory().getSize(); i++) {
 			ItemStack stack = getInventory().getContents()[i];
-			System.out.println(stack.getType());
 			if(stack == null) continue;
 			if(stack.getType() == type) {
 				int counter = 0;
@@ -214,4 +213,5 @@ public class BlockAutoCrafter extends QueueableConnectedBlock implements Interac
 	public String getInternInventoryName() {
 		return "AutoCraft";
 	}
+
 }

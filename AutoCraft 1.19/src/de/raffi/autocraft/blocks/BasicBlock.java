@@ -3,6 +3,8 @@ package de.raffi.autocraft.blocks;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
@@ -10,7 +12,7 @@ import org.json.simple.JSONObject;
 import de.raffi.autocraft.converter.ConverterLocation;
 import de.raffi.autocraft.utils.JSONConverter;
 
-public abstract class BasicBlock {
+public abstract class BasicBlock implements BlockInventoryHolder {
 	
 	private Material material;
 	private int subID;
@@ -97,4 +99,9 @@ public abstract class BasicBlock {
 	public void update() {}
 	public abstract Inventory getDefaultInventory();
 	public abstract String getInternInventoryName();
+	
+	@Override
+	public Block getBlock() {
+		return getLocation().getBlock();
+	}
 }

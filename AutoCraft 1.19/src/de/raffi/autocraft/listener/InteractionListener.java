@@ -67,6 +67,7 @@ public class InteractionListener implements Listener {
 			e.getPlayer().sendMessage(Messages.PREFIX+" " +Messages.BLOCK_HOPPER_CONNECTED);
 			break;
 		case CRAFTING_TABLE:
+			if(!Messages.ALLOW_CRAFT_AUTOCRAFT) return;
 			if(e.getItemInHand().getItemMeta().getDisplayName()==null)return;
 			if(!e.getItemInHand().getItemMeta().getDisplayName().equals("§eAutoCrafter§5")) return;
 			BlockAutoCrafter crafter = new BlockAutoCrafter(Material.CRAFTING_TABLE, 0, e.getBlockPlaced().getLocation(), null, RecipeRegistry.getRecipes().get(0));
@@ -74,6 +75,7 @@ public class InteractionListener implements Listener {
 			e.getPlayer().sendMessage(Messages.PREFIX+" " +Messages.BLOCK_PLACED.replace("%block%", "AutoCrafter"));
 			break;
 		case ENCHANTING_TABLE:
+			if(!Messages.ALLOW_CRAFT_AUTOENCHANT) return;
 			if (e.getItemInHand().getItemMeta().getDisplayName() == null) return;
 			if (!e.getItemInHand().getItemMeta().getDisplayName().equals(AutoCraft.getAutoCraft().getAutoEnchanter().getItemMeta().getDisplayName()))return;
 			BlockAutoEnchanter enchanter = new BlockAutoEnchanter(e.getBlockPlaced().getLocation(),null);
@@ -81,6 +83,7 @@ public class InteractionListener implements Listener {
 			e.getPlayer().sendMessage(Messages.PREFIX + " " + Messages.BLOCK_PLACED.replace("%block%", "AutoEnchanter"));
 			break;
 		case DIAMOND_ORE:
+			if(!Messages.ALLOW_CRAFT_OREBLOCK) return;
 			if (e.getItemInHand().getItemMeta().getDisplayName() == null) return;
 			if (!e.getItemInHand().getItemMeta().getDisplayName().equals(AutoCraft.getAutoCraft().getOreBlock().getItemMeta().getDisplayName()))return;
 			BlockOreAnalysizer ore = new BlockOreAnalysizer(Material.DIAMOND_ORE, 0, e.getBlockPlaced().getLocation());
@@ -88,6 +91,7 @@ public class InteractionListener implements Listener {
 			e.getPlayer().sendMessage(Messages.PREFIX + " " + Messages.BLOCK_PLACED.replace("%block%", "CobbleConverter"));
 			break;
 		case NOTE_BLOCK:
+			if(!Messages.ALLOW_CRAFT_BLOCKCRUSHER) return;
 			if (e.getItemInHand().getItemMeta().getDisplayName() == null) return;
 			if (!e.getItemInHand().getItemMeta().getDisplayName().equals(AutoCraft.getAutoCraft().getBlockCrusher().getItemMeta().getDisplayName()))return;
 			BlockCrusher crusher = new BlockCrusher(Material.ANVIL, 0, e.getBlockPlaced().getLocation(), null);

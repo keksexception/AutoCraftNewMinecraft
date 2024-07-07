@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import de.raffi.autocraft.builder.ItemBuilder;
 import de.raffi.autocraft.converter.ConverterLocation;
 import de.raffi.autocraft.recipes.Recipe;
 import de.raffi.autocraft.recipes.RecipeRegistry;
@@ -37,18 +36,35 @@ public class BlockCrusher extends QueueableConnectedBlock implements Interactabl
 	}
 	@Override
 	public void addItemToInventory(ItemStack item) {
-		boolean recipeFound = false;
-		for(Recipe r : RecipeRegistry.getRecipes()) {
-			if(!r.getTarget().isSimilar(item)) continue;
-			for(ItemStack ingrediant : r.getIngrediants()) {
-				for(int i = 0; i < item.getAmount()-(r.getTarget().getAmount()-1); i++)
-					getQueueInventory().addItem(new ItemBuilder(ingrediant).setDurability(0).build());
+		Recipe foundRecipe = null;
+		getInventory().addItem(item);
+		for(int i = 0; i < item.getAmount(); i++) {
+			for(ItemStack available : getInventory().getContents()) {
+				if(available==null)continue;
+				Material availableType = available.getType();
+				int availableCount = available.getAmount();
+				for(Recipe recipe : RecipeRegistry.getRecipes()) {
+					if(recipe.getTarget().getType()==availableType && availableCount >= recipe.getTarget().getAmount()) {
+						for(ItemStack ingrediants : recipe.getIngrediants()) {
+							getQueueInventory().addItem(ingrediants);
+							
+						}
+						foundRecipe = recipe;
+						break;
+					}
+				}
+				if(foundRecipe!=null) {
+					removeFromInv(getInventory(), foundRecipe.getTarget().getType(), foundRecipe.getTarget().getAmount());				
+					foundRecipe = null;
+					break;
+				}
+				
 			}
-			recipeFound = true;
-			break;
 		}
-		if(recipeFound) return;
-		getQueueInventory().addItem(item);
+		
+		
+	
+
 	}
 	
 	@Override
@@ -69,7 +85,7 @@ public class BlockCrusher extends QueueableConnectedBlock implements Interactabl
 				}
 			}
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 	
 		

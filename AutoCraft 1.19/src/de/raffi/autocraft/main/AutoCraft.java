@@ -1,5 +1,7 @@
 package de.raffi.autocraft.main;
 
+import java.util.HashSet;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -8,6 +10,11 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.raffi.autocraft.blocks.BasicBlock;
+import de.raffi.autocraft.blocks.BlockAutoCrafter;
+import de.raffi.autocraft.blocks.BlockAutoEnchanter;
+import de.raffi.autocraft.blocks.BlockCrusher;
+import de.raffi.autocraft.blocks.BlockOreAnalysizer;
 import de.raffi.autocraft.builder.ItemBuilder;
 import de.raffi.autocraft.commands.CommandAutoCraft;
 import de.raffi.autocraft.config.Messages;
@@ -94,12 +101,39 @@ public class AutoCraft extends JavaPlugin {
 
 		if(Messages.AUTO_SAVING_DELAY!=-1) {
 			Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, ()->{
-				//System.out.println("[AutoCraft] Autosaving blocks ...");
 				BlockManager.saveBlocks();
-			//	System.out.println("[AutoCraft] Autosaving blocks complete.");
 			}, Messages.AUTO_SAVING_DELAY, Messages.AUTO_SAVING_DELAY);
 		}
 		
+		removeIllegalBlocks();
+		
+	}
+	public void removeIllegalBlocks() {
+		System.out.println("[AutoCraft] Scanning for illegal blocks ...");
+		HashSet<BasicBlock> blocksToRemove = new HashSet<>();
+		for(BasicBlock block : BlockManager.getBlocks()) {
+			if(!Messages.ALLOW_CRAFT_AUTOCRAFT) {
+				if(block instanceof BlockAutoCrafter)
+					blocksToRemove.add(block);
+			}
+			if(!Messages.ALLOW_CRAFT_AUTOENCHANT) {
+				if(block instanceof BlockAutoEnchanter)
+					blocksToRemove.add(block);
+			}
+			if(!Messages.ALLOW_CRAFT_OREBLOCK) {
+				if(block instanceof BlockOreAnalysizer)
+					blocksToRemove.add(block);
+			}
+			if(!Messages.ALLOW_CRAFT_BLOCKCRUSHER) {
+				if(block instanceof BlockCrusher)
+					blocksToRemove.add(block);
+			}
+		}
+		System.out.println("[AutoCraft] Found " + blocksToRemove.size() + " illegal blocks.");
+		for(BasicBlock remove : blocksToRemove) {
+			BlockManager.unregisterBlock(remove);
+		}
+		System.out.println("[AutoCraft] All illegal blocks have been removed.");
 	}
 	public ItemStack getAutoCrafter() {
 		return autoCrafter;
